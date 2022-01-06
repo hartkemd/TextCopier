@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TextCopier"
-        mc:Ignorable="d"
-        Title="TextCopier" Height="500" Width="800">
+        mc:Ignorable="d" FontSize="16"
+        Title="TextCopier" Height="500" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
@@ -13,20 +13,22 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <DataGrid x:Name="textItemsDataGrid" Grid.Row="0" Grid.Column="0"
+        <DataGrid x:Name="textItemsDataGrid" Grid.Row="0" Grid.Column="0" Margin="5"
                   CanUserAddRows="False" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Description">
+                <DataGridTemplateColumn Header="Description" MinWidth="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Description}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Text To Copy">
+                <DataGridTemplateColumn Header="Text To Copy" MinWidth="600">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Text}" />
@@ -42,5 +44,17 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+            <TextBox x:Name="textItemDescriptionTextBox" MinWidth="200" Margin="5"></TextBox>
+            <TextBox x:Name="textItemTextTextBox" MinWidth="600" Margin="5"></TextBox>
+            <Button x:Name="addTextItemButton" Margin="5" Click="AddTextItemButton_Click">Add</Button>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0"
+                    HorizontalAlignment="Center">
+            <Button x:Name="removeTextItemButton" Margin="5" Click="RemoveTextItemButton_Click">Remove</Button>
+        </StackPanel>
+
     </Grid>
 </Window>

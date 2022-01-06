@@ -1,7 +1,7 @@
 ﻿using DataAccessLibrary;
 using DataAccessLibrary.Models;
 using Microsoft.Extensions.Configuration;
-using System.ComponentModel;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +16,7 @@ namespace TextCopier
         private static IConfiguration _config;
         private static string _filePath;
         private static TextFileDataAccess db = new();
-        private BindingList<TextItemModel> textItems = new();
+        private ObservableCollection<TextItemModel> textItems = new();
 
         public MainWindow()
         {
@@ -83,6 +83,27 @@ namespace TextCopier
             var button = (Button)sender;
             var textItem = (TextItemModel)button.DataContext;
             Clipboard.SetText(textItem.Text);
+        }
+
+        private void AddTextItemButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool descriptionIsInvalid = string.IsNullOrWhiteSpace(textItemDescriptionTextBox.Text);
+            bool textIsInvalid = string.IsNullOrWhiteSpace(textItemTextTextBox.Text);
+
+            if (descriptionIsInvalid == false && textIsInvalid == false)
+            {
+                textItems.Add(new TextItemModel { Description = textItemDescriptionTextBox.Text, Text = textItemTextTextBox.Text });
+                textItemDescriptionTextBox.Clear();
+                textItemTextTextBox.Clear();
+            }
+        }
+
+        private void RemoveTextItemButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (textItemsDataGrid.SelectedIndex != -1)
+            {
+                textItems.RemoveAt(textItemsDataGrid.SelectedIndex);
+            }
         }
     }
 }
