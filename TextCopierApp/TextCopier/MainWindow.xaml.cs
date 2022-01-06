@@ -1,10 +1,10 @@
 ﻿using DataAccessLibrary;
 using DataAccessLibrary.Models;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace TextCopier
 {
@@ -24,8 +24,10 @@ namespace TextCopier
             InitializeConfiguration();
             _filePath = _config.GetValue<string>("FilePath");
 
-            TextItemModel textItem1 = new() { Description = "Test", Text = "Some text to copy." };
-            textItems.Add(textItem1);
+            textItems.Add(new TextItemModel { Description = "Test", Text = "Some sample text to copy." });
+            textItems.Add(new TextItemModel { Description = "Test2", Text = "Some more sample text to copy." });
+
+            textItemsDataGrid.Items.Clear();
             textItemsDataGrid.ItemsSource = textItems;
         }
 
@@ -74,6 +76,13 @@ namespace TextCopier
                 .AddJsonFile("appsettings.json");
 
             _config = builder.Build();
+        }
+
+        private void CopyButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var textItem = (TextItemModel)button.DataContext;
+            Clipboard.SetText(textItem.Text);
         }
     }
 }
