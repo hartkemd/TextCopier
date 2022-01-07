@@ -9,13 +9,14 @@ To do.
 
 ## Roadmap
 ### Features Implemented:
-* Display a DataGrid of text to copy
-* Copy text from DataGrid to the clipboard
-* Users can add and remove TextItems to/from the DataGrid, using buttons
+* Display a DataGrid of text to copy.
+* Buttons to copy text from DataGrid to the clipboard.
+* Users can create, read, update, and delete items using text file data access. This uses CSV files, so text cannot currently contain commas.
+* Users can clear the selected item in the DataGrid and the text boxes.
 
 ### To Do:
-* Add ability to sort items in DataGrid manually (with buttons) or alphabetically (A -> Z)
-* Work on text file and/or SQLite data access
+* Add ability to sort items in DataGrid manually (with Move Up/Move Down buttons) or alphabetically (A -> Z).
+* Implement SQLite data access, so we don't have to worry about commas in the data.
 * (Longer Term): Integrate into a larger application, such as an IT Service Desk app, with features like:
     * A notepad that automatically saves what you type
     * An app that keeps a store of quick reference documentation, editable by some and read-only by others, in a multi-user environment
