@@ -16,7 +16,7 @@ namespace TextCopier
         private static IConfiguration _config;
         private static string _filePath;
         private static TextFileDataAccess db = new();
-        private ObservableCollection<TextItemModel> textItems = new();
+        private static ObservableCollection<TextItemModel> textItems = new();
 
         public MainWindow()
         {
@@ -24,48 +24,48 @@ namespace TextCopier
             InitializeConfiguration();
             _filePath = _config.GetValue<string>("FilePath");
 
-            textItems.Add(new TextItemModel { Description = "Test", Text = "Some sample text to copy." });
-            textItems.Add(new TextItemModel { Description = "Test2", Text = "Some more sample text to copy." });
+            ReadTextItems();
 
             textItemsDataGrid.Items.Clear();
             textItemsDataGrid.ItemsSource = textItems;
         }
 
-        private static void GetAllTextItems()
+        // Methods that talk to DataAccessLibrary:
+        private static void ReadTextItems()
         {
-            var textItems = db.ReadAllRecords(_filePath);
+            var records = db.ReadAllRecords(_filePath);
 
-            foreach (var textItem in textItems)
+            foreach (var record in records)
             {
-                //$"{textItem.Description} {textItem.Text}";
+                textItems.Add(record);
             }
         }
 
         private static void CreateTextItem(TextItemModel textItem)
         {
-            var textItems = db.ReadAllRecords(_filePath);
-            textItems.Add(textItem);
-            db.WriteAllRecords(textItems, _filePath);
+            var records = db.ReadAllRecords(_filePath);
+            records.Add(textItem);
+            db.WriteAllRecords(records, _filePath);
         }
 
-        private static void UpdateFirstTextItemsDescription(string description)
+        private static void UpdateTextItemsDescription(string description, int index)
         {
-            var textItems = db.ReadAllRecords(_filePath);
-            textItems[0].Description = description;
-            db.WriteAllRecords(textItems, _filePath);
+            var records = db.ReadAllRecords(_filePath);
+            records[index].Description = description;
+            db.WriteAllRecords(records, _filePath);
         }
 
-        private static void RemoveDescriptionFromTextItem()
+        private static void UpdateTextItemsText(string text, int index)
         {
-            var textItems = db.ReadAllRecords(_filePath);
-            textItems[0].Description = "";
-            db.WriteAllRecords(textItems, _filePath);
+            var records = db.ReadAllRecords(_filePath);
+            records[index].Text = text;
+            db.WriteAllRecords(records, _filePath);
         }
 
-        private static void RemoveTextItem()
+        private static void DeleteTextItem(int index)
         {
             var textItems = db.ReadAllRecords(_filePath);
-            textItems.RemoveAt(0);
+            textItems.RemoveAt(index);
             db.WriteAllRecords(textItems, _filePath);
         }
 
@@ -78,6 +78,14 @@ namespace TextCopier
             _config = builder.Build();
         }
 
+        // UI helper methods:
+        private void ClearTextBoxes()
+        {
+            textItemDescriptionTextBox.Clear();
+            textItemTextTextBox.Clear();
+        }
+
+        // UI events:
         private void CopyButton_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
@@ -85,24 +93,63 @@ namespace TextCopier
             Clipboard.SetText(textItem.Text);
         }
 
-        private void AddTextItemButton_Click(object sender, RoutedEventArgs e)
+        private void CreateTextItemButton_Click(object sender, RoutedEventArgs e)
         {
             bool descriptionIsInvalid = string.IsNullOrWhiteSpace(textItemDescriptionTextBox.Text);
             bool textIsInvalid = string.IsNullOrWhiteSpace(textItemTextTextBox.Text);
 
             if (descriptionIsInvalid == false && textIsInvalid == false)
             {
-                textItems.Add(new TextItemModel { Description = textItemDescriptionTextBox.Text, Text = textItemTextTextBox.Text });
-                textItemDescriptionTextBox.Clear();
-                textItemTextTextBox.Clear();
+                TextItemModel itemToAdd = new();
+                itemToAdd.Description = textItemDescriptionTextBox.Text;
+                itemToAdd.Text = textItemTextTextBox.Text;
+                textItems.Add(itemToAdd);
+                CreateTextItem(itemToAdd);
+                ClearTextBoxes();
             }
         }
 
-        private void RemoveTextItemButton_Click(object sender, RoutedEventArgs e)
+        private void UpdateTextItemButton_Click(object sender, RoutedEventArgs e)
         {
-            if (textItemsDataGrid.SelectedIndex != -1)
+            int index = textItemsDataGrid.SelectedIndex;
+
+            if (index != -1)
             {
-                textItems.RemoveAt(textItemsDataGrid.SelectedIndex);
+                textItems[index].Description = textItemDescriptionTextBox.Text;
+                textItems[index].Text = textItemTextTextBox.Text;
+
+                UpdateTextItemsDescription(textItems[index].Description, index);
+                UpdateTextItemsText(textItems[index].Text, index);
+
+                textItemsDataGrid.Items.Refresh();
+                textItemsDataGrid.SelectedItem = null;
+                ClearTextBoxes();
+            }
+        }
+
+        private void DeleteTextItemButton_Click(object sender, RoutedEventArgs e)
+        {
+            int index = textItemsDataGrid.SelectedIndex;
+            if (index != -1)
+            {
+                DeleteTextItem(index);
+                textItems.RemoveAt(index);
+                ClearTextBoxes();
+            }
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            textItemsDataGrid.SelectedItem = null;
+            ClearTextBoxes();
+        }
+
+        private void TextItemsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (textItemsDataGrid.SelectedItem != null)
+            {
+                textItemDescriptionTextBox.Text = ((TextItemModel)textItemsDataGrid.SelectedItem).Description;
+                textItemTextTextBox.Text = ((TextItemModel)textItemsDataGrid.SelectedItem).Text;
             }
         }
     }

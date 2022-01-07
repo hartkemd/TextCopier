@@ -19,16 +19,17 @@
         </Grid.RowDefinitions>
 
         <DataGrid x:Name="textItemsDataGrid" Grid.Row="0" Grid.Column="0" Margin="5"
-                  CanUserAddRows="False" AutoGenerateColumns="False">
+                  CanUserAddRows="False" AutoGenerateColumns="False"
+                  SelectionChanged="TextItemsDataGrid_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Description" MinWidth="200">
+                <DataGridTemplateColumn Header="Description" Width="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Description}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Text To Copy" MinWidth="600">
+                <DataGridTemplateColumn Header="Text To Copy" Width="600">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Text}" />
@@ -46,14 +47,16 @@
         </DataGrid>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-            <TextBox x:Name="textItemDescriptionTextBox" MinWidth="200" Margin="5"></TextBox>
-            <TextBox x:Name="textItemTextTextBox" MinWidth="600" Margin="5"></TextBox>
-            <Button x:Name="addTextItemButton" Margin="5" Click="AddTextItemButton_Click">Add</Button>
+            <TextBox x:Name="textItemDescriptionTextBox" Width="200" Margin="5"></TextBox>
+            <TextBox x:Name="textItemTextTextBox" Width="600" Margin="5"></TextBox>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0"
                     HorizontalAlignment="Center">
-            <Button x:Name="removeTextItemButton" Margin="5" Click="RemoveTextItemButton_Click">Remove</Button>
+            <Button x:Name="createTextItemButton" Margin="5" Click="CreateTextItemButton_Click">Create</Button>
+            <Button x:Name="updateTextItemButton" Margin="5" Click="UpdateTextItemButton_Click">Update</Button>
+            <Button x:Name="deleteTextItemButton" Margin="5" Click="DeleteTextItemButton_Click">Delete</Button>
+            <Button x:Name="clearButton" Margin="5" Click="ClearButton_Click">Clear</Button>
         </StackPanel>
 
     </Grid>
