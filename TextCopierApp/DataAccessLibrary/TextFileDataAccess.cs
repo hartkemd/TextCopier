@@ -37,7 +37,7 @@ namespace DataAccessLibrary
             return output;
         }
 
-        public void WriteAllRecords(List<TextItemModel> textItems, string filePath)
+        public void WriteAllRecords(IEnumerable<TextItemModel> textItems, string filePath)
         {
             List<string> lines = new();
 

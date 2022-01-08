@@ -15,6 +15,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -57,6 +58,13 @@
             <Button x:Name="updateTextItemButton" Margin="5" Click="UpdateTextItemButton_Click">Update</Button>
             <Button x:Name="deleteTextItemButton" Margin="5" Click="DeleteTextItemButton_Click">Delete</Button>
             <Button x:Name="clearButton" Margin="5" Click="ClearButton_Click">Clear</Button>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0"
+                    HorizontalAlignment="Center">
+            <Button x:Name="moveUpButton" Margin="5" Click="MoveUpButton_Click">Move Up</Button>
+            <Button x:Name="moveDownButton" Margin="5" Click="MoveDownButton_Click">Move Down</Button>
+            <Button x:Name="sortButton" Margin="5" Click="SortButton_Click">Sort A -> Z</Button>
         </StackPanel>
 
     </Grid>

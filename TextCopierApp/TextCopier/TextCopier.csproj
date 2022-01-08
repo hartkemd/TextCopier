@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
+    <ProjectReference Include="..\UIHelperLibrary\UIHelperLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>

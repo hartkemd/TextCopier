@@ -1,5 +1,6 @@
 ﻿using DataAccessLibrary;
 using DataAccessLibrary.Models;
+using UIHelperLibrary;
 using Microsoft.Extensions.Configuration;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -24,14 +25,14 @@ namespace TextCopier
             InitializeConfiguration();
             _filePath = _config.GetValue<string>("FilePath");
 
-            ReadTextItems();
+            ReadAllTextItems();
 
             textItemsDataGrid.Items.Clear();
             textItemsDataGrid.ItemsSource = textItems;
         }
 
         // Methods that talk to DataAccessLibrary:
-        private static void ReadTextItems()
+        private static void ReadAllTextItems()
         {
             var records = db.ReadAllRecords(_filePath);
 
@@ -39,6 +40,11 @@ namespace TextCopier
             {
                 textItems.Add(record);
             }
+        }
+
+        private static void WriteAllTextItems()
+        {
+            db.WriteAllRecords(textItems, _filePath);
         }
 
         private static void CreateTextItem(TextItemModel textItem)
@@ -151,6 +157,39 @@ namespace TextCopier
                 textItemDescriptionTextBox.Text = ((TextItemModel)textItemsDataGrid.SelectedItem).Description;
                 textItemTextTextBox.Text = ((TextItemModel)textItemsDataGrid.SelectedItem).Text;
             }
+        }
+
+        private void MoveUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            int selectedIndex = textItemsDataGrid.SelectedIndex;
+
+            if (selectedIndex > 0)
+            {
+                textItems.Move(selectedIndex, selectedIndex - 1);
+                WriteAllTextItems();
+            }
+
+            ClearTextBoxes();
+        }
+
+        private void MoveDownButton_Click(object sender, RoutedEventArgs e)
+        {
+            int selectedIndex = textItemsDataGrid.SelectedIndex;
+
+            if (selectedIndex < textItemsDataGrid.Items.Count - 1)
+            {
+                textItems.Move(selectedIndex, selectedIndex + 1);
+                WriteAllTextItems();
+            }
+
+            ClearTextBoxes();
+        }
+
+        private void SortButton_Click(object sender, RoutedEventArgs e)
+        {
+            textItems.Sort();
+            WriteAllTextItems();
+            ClearTextBoxes();
         }
     }
 }
