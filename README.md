@@ -1,11 +1,28 @@
 # TextCopier
-This application helps manage pieces of text that are frequently copied to the clipboard.
+This application allows you to store and copy pieces of text to the clipboard from a list. I am using WPF for the UI.
 
 ## Installation Instructions
 None yet.
 
 ## How to Use
-To do.
+### To Create an Item:
+1. Type or paste text into the text boxes below the Description and Text To Copy columns.
+2. Click the Create button.
+### To Update an Item:
+1. Select the item to update from the list.
+2. Edit the text that appears in the text boxes below the list.
+3. Click the Update button.
+### To Delete an Item:
+1. Select the item to delete from the list.
+2. Click the Delete button.
+### To Copy an Item:
+* Click the Copy button next to the item you'd like to copy.
+### To Clear the Text Boxes:
+* Click the Clear button.
+### To Move an Item Up and Down:
+* Use the Move Up and Move Down buttons.
+### To Sort the List:
+* Click the "Sort A -> Z" button.
 
 ## Roadmap
 ### Features Implemented:
