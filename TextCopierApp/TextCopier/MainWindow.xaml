@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TextCopier"
         mc:Ignorable="d" FontSize="16"
-        Title="TextCopier" Height="500" Width="1000">
+        Title="TextCopier" Height="450" Width="950">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
