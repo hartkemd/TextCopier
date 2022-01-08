@@ -1,6 +1,9 @@
 # TextCopier
 This application allows you to store and copy pieces of text to the clipboard from a list. I am using WPF for the UI.
 
+## Origin
+I was searching different places in documentation at work to copy and paste text into emails I was sending. I thought it would be better to store all text in one spot and allow it to easily be copied.
+
 ## Installation Instructions
 None yet.
 
@@ -23,6 +26,9 @@ None yet.
 * Use the Move Up and Move Down buttons.
 ### To Sort the List:
 * Click the "Sort A -> Z" button.
+
+## Screenshots
+* [Main Window](Screenshots/main-window.png)
 
 ## Roadmap
 ### Features Implemented:
