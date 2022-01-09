@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccessLibrary;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -8,10 +9,14 @@ using System.Windows;
 
 namespace TextCopier
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            var dataAccess = new TextFileDataAccess();
+            Application.Current.MainWindow = new MainWindow(dataAccess);
+            Application.Current.MainWindow.Show();
+        }
     }
 }

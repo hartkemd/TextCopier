@@ -16,12 +16,13 @@ namespace TextCopier
     {
         private static IConfiguration _config;
         private static string _filePath;
-        private static TextFileDataAccess db = new();
         private static ObservableCollection<TextItemModel> textItems = new();
+        private readonly IDataAccess _db;
 
-        public MainWindow()
+        public MainWindow(IDataAccess db)
         {
             InitializeComponent();
+            _db = db;
             InitializeConfiguration();
             _filePath = _config.GetValue<string>("FilePath");
 
@@ -29,12 +30,13 @@ namespace TextCopier
 
             textItemsDataGrid.Items.Clear();
             textItemsDataGrid.ItemsSource = textItems;
+            
         }
 
         // Methods that talk to DataAccessLibrary:
-        private static void ReadAllTextItems()
+        private void ReadAllTextItems()
         {
-            var records = db.ReadAllRecords(_filePath);
+            var records = _db.ReadAllRecords(_filePath);
 
             foreach (var record in records)
             {
@@ -42,40 +44,40 @@ namespace TextCopier
             }
         }
 
-        private static void WriteAllTextItems()
+        private void WriteAllTextItems()
         {
-            db.WriteAllRecords(textItems, _filePath);
+            _db.WriteAllRecords(textItems, _filePath);
         }
 
-        private static void CreateTextItem(TextItemModel textItem)
+        private void CreateTextItem(TextItemModel textItem)
         {
-            var records = db.ReadAllRecords(_filePath);
+            var records = _db.ReadAllRecords(_filePath);
             records.Add(textItem);
-            db.WriteAllRecords(records, _filePath);
+            _db.WriteAllRecords(records, _filePath);
         }
 
-        private static void UpdateTextItemsDescription(string description, int index)
+        private void UpdateTextItemsDescription(string description, int index)
         {
-            var records = db.ReadAllRecords(_filePath);
+            var records = _db.ReadAllRecords(_filePath);
             records[index].Description = description;
-            db.WriteAllRecords(records, _filePath);
+            _db.WriteAllRecords(records, _filePath);
         }
 
-        private static void UpdateTextItemsText(string text, int index)
+        private void UpdateTextItemsText(string text, int index)
         {
-            var records = db.ReadAllRecords(_filePath);
+            var records = _db.ReadAllRecords(_filePath);
             records[index].Text = text;
-            db.WriteAllRecords(records, _filePath);
+            _db.WriteAllRecords(records, _filePath);
         }
 
-        private static void DeleteTextItem(int index)
+        private void DeleteTextItem(int index)
         {
-            var textItems = db.ReadAllRecords(_filePath);
+            var textItems = _db.ReadAllRecords(_filePath);
             textItems.RemoveAt(index);
-            db.WriteAllRecords(textItems, _filePath);
+            _db.WriteAllRecords(textItems, _filePath);
         }
 
-        private static void InitializeConfiguration()
+        private void InitializeConfiguration()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
