@@ -5,7 +5,7 @@ using System.IO;
 
 namespace DataAccessLibrary
 {
-    public class TextFileDataAccess
+    public class TextFileDataAccess : IDataAccess
     {
         public List<TextItemModel> ReadAllRecords(string filePath)
         {
