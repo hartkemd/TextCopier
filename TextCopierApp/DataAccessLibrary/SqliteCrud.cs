@@ -6,11 +6,12 @@ namespace DataAccessLibrary
     public class SqliteCrud : ISqlCrud
     {
         private readonly string _connectionString;
-        private SqliteDataAccess db = new();
+        private ISqliteDataAccess db;
 
-        public SqliteCrud(string connectionString)
+        public SqliteCrud(string connectionString, ISqliteDataAccess db)
         {
             _connectionString = connectionString;
+            this.db = db;
         }
 
         public List<TextItemModel> ReadAllTextItems()

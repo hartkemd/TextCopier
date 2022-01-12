@@ -10,8 +10,9 @@ namespace TextCopier
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            var dataAccess = new SqliteCrud(GetConnectionString());
-            Application.Current.MainWindow = new MainWindow(dataAccess);
+            var dataAccess = new SqliteDataAccess();
+            var crud = new SqliteCrud(GetConnectionString(), dataAccess);
+            Application.Current.MainWindow = new MainWindow(crud);
             Application.Current.MainWindow.Show();
         }
 
