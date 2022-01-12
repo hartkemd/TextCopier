@@ -1,9 +1,7 @@
 ﻿using DataAccessLibrary;
 using DataAccessLibrary.Models;
 using UIHelperLibrary;
-using Microsoft.Extensions.Configuration;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,29 +12,23 @@ namespace TextCopier
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static IConfiguration _config;
-        private static string _filePath;
         private static ObservableCollection<TextItemModel> textItems = new();
-        private readonly IDataAccess _db;
+        private readonly ISqlCrud _sqlCrud;
 
-        public MainWindow(IDataAccess db)
+        public MainWindow(ISqlCrud sqlCrud)
         {
             InitializeComponent();
-            _db = db;
-            InitializeConfiguration();
-            _filePath = _config.GetValue<string>("FilePath");
-
+            _sqlCrud = sqlCrud;
             ReadAllTextItems();
 
             textItemsDataGrid.Items.Clear();
             textItemsDataGrid.ItemsSource = textItems;
-            
         }
 
         // Methods that talk to DataAccessLibrary:
         private void ReadAllTextItems()
         {
-            var records = _db.ReadAllRecords(_filePath);
+            var records = _sqlCrud.ReadAllTextItems();
 
             foreach (var record in records)
             {
@@ -44,46 +36,19 @@ namespace TextCopier
             }
         }
 
-        private void WriteAllTextItems()
-        {
-            _db.WriteAllRecords(textItems, _filePath);
-        }
-
         private void CreateTextItem(TextItemModel textItem)
         {
-            var records = _db.ReadAllRecords(_filePath);
-            records.Add(textItem);
-            _db.WriteAllRecords(records, _filePath);
+            _sqlCrud.CreateTextItem(textItem);
         }
 
-        private void UpdateTextItemsDescription(string description, int index)
+        private void UpdateTextItem(TextItemModel textItem)
         {
-            var records = _db.ReadAllRecords(_filePath);
-            records[index].Description = description;
-            _db.WriteAllRecords(records, _filePath);
-        }
-
-        private void UpdateTextItemsText(string text, int index)
-        {
-            var records = _db.ReadAllRecords(_filePath);
-            records[index].Text = text;
-            _db.WriteAllRecords(records, _filePath);
+            _sqlCrud.UpdateTextItem(textItem);
         }
 
         private void DeleteTextItem(int index)
         {
-            var textItems = _db.ReadAllRecords(_filePath);
-            textItems.RemoveAt(index);
-            _db.WriteAllRecords(textItems, _filePath);
-        }
-
-        private void InitializeConfiguration()
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
-
-            _config = builder.Build();
+            _sqlCrud.DeleteTextItem(index);
         }
 
         // UI helper methods:
@@ -126,8 +91,7 @@ namespace TextCopier
                 textItems[index].Description = textItemDescriptionTextBox.Text;
                 textItems[index].Text = textItemTextTextBox.Text;
 
-                UpdateTextItemsDescription(textItems[index].Description, index);
-                UpdateTextItemsText(textItems[index].Text, index);
+                UpdateTextItem((TextItemModel)textItemsDataGrid.SelectedItem);
 
                 textItemsDataGrid.Items.Refresh();
                 textItemsDataGrid.SelectedItem = null;
@@ -138,9 +102,11 @@ namespace TextCopier
         private void DeleteTextItemButton_Click(object sender, RoutedEventArgs e)
         {
             int index = textItemsDataGrid.SelectedIndex;
+            
             if (index != -1)
             {
-                DeleteTextItem(index);
+                TextItemModel itemToDelete = (TextItemModel)textItemsDataGrid.SelectedItem;
+                DeleteTextItem(itemToDelete.Id);
                 textItems.RemoveAt(index);
                 ClearTextBoxes();
             }
@@ -168,7 +134,7 @@ namespace TextCopier
             if (selectedIndex > 0)
             {
                 textItems.Move(selectedIndex, selectedIndex - 1);
-                WriteAllTextItems();
+                //WriteAllTextItems();
             }
 
             ClearTextBoxes();
@@ -178,10 +144,10 @@ namespace TextCopier
         {
             int selectedIndex = textItemsDataGrid.SelectedIndex;
 
-            if (selectedIndex < textItemsDataGrid.Items.Count - 1)
+            if ((selectedIndex != -1) && (selectedIndex < textItemsDataGrid.Items.Count - 1))
             {
                 textItems.Move(selectedIndex, selectedIndex + 1);
-                WriteAllTextItems();
+                //WriteAllTextItems();
             }
 
             ClearTextBoxes();
@@ -190,7 +156,7 @@ namespace TextCopier
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
             textItems.Sort();
-            WriteAllTextItems();
+            //WriteAllTextItems();
             ClearTextBoxes();
         }
     }

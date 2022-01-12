@@ -1,13 +1,9 @@
 ﻿using DataAccessLibrary.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLibrary
 {
-    public class SqliteCrud
+    public class SqliteCrud : ISqlCrud
     {
         private readonly string _connectionString;
         private SqliteDataAccess db = new();
@@ -17,7 +13,7 @@ namespace DataAccessLibrary
             _connectionString = connectionString;
         }
 
-        public List<TextItemModel> GetAllTextItems()
+        public List<TextItemModel> ReadAllTextItems()
         {
             string sql = "select Id, Description, Text from TextItems;";
 

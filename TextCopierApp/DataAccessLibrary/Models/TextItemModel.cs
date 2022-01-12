@@ -4,6 +4,7 @@ namespace DataAccessLibrary.Models
 {
     public class TextItemModel : IComparable
     {
+        public int Id { get; set; }
         public string Description { get; set; }
         public string Text { get; set; }
 

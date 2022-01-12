@@ -1,10 +1,6 @@
 ﻿using DataAccessLibrary;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 using System.Windows;
 
 namespace TextCopier
@@ -14,9 +10,24 @@ namespace TextCopier
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            var dataAccess = new TextFileDataAccess();
+            var dataAccess = new SqliteCrud(GetConnectionString());
             Application.Current.MainWindow = new MainWindow(dataAccess);
             Application.Current.MainWindow.Show();
+        }
+
+        private static string GetConnectionString(string connectionStringName = "Default")
+        {
+            string output;
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
+
+            var config = builder.Build();
+
+            output = config.GetConnectionString(connectionStringName);
+
+            return output;
         }
     }
 }
