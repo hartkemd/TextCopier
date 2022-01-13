@@ -15,21 +15,72 @@ namespace TextCopier
     {
         private static ObservableCollection<TextItemModel> textItems = new();
         private readonly ISqlCrud _sqlCrud;
+        private bool useCustomSort = false; // default of false will sort A -> Z by Description
+        private const string configFilePath = "config.txt";
 
         public MainWindow(ISqlCrud sqlCrud)
         {
             InitializeComponent();
             _sqlCrud = sqlCrud;
-            ReadAllTextItems();
+            IfConfigFileDoesNotExistCreateIt();
+            ReadConfigFile();
+            ReadAllTextItemsDependingOnCustomSort();
 
             textItemsDataGrid.Items.Clear();
             textItemsDataGrid.ItemsSource = textItems;
         }
 
         // Methods that talk to DataAccessLibrary:
-        private void ReadAllTextItems()
+        private void IfConfigFileDoesNotExistCreateIt()
         {
-            var records = _sqlCrud.ReadAllTextItems();
+            if (TextFileIO.FileExists(configFilePath) == false)
+            {
+                WriteConfigFile();
+            }
+        }
+
+        private void ReadConfigFile()
+        {
+            string fileContents = TextFileIO.ReadTextFromFile(configFilePath);
+
+            bool isValidBool = bool.TryParse(fileContents, out bool customSortBool);
+
+            if (isValidBool == true)
+            {
+                useCustomSort = customSortBool;
+            }
+        }
+
+        private void WriteConfigFile()
+        {
+            TextFileIO.WriteTextToFile(configFilePath, useCustomSort.ToString());
+        }
+
+        private void ReadAllTextItemsDependingOnCustomSort()
+        {
+            if (useCustomSort == true)
+            {
+                ReadAllTextItemsOrderedBySortPosition();
+            }
+            else
+            {
+                ReadAllTextItemsOrderedByDescription();
+            }
+        }
+        
+        private void ReadAllTextItemsOrderedBySortPosition()
+        {
+            var records = _sqlCrud.ReadAllTextItemsOrderedBySortPosition();
+
+            foreach (var record in records)
+            {
+                textItems.Add(record);
+            }
+        }
+
+        private void ReadAllTextItemsOrderedByDescription()
+        {
+            var records = _sqlCrud.ReadAllTextItemsOrderedByDescription();
 
             foreach (var record in records)
             {
@@ -154,6 +205,9 @@ namespace TextCopier
 
         private void MoveUpButton_Click(object sender, RoutedEventArgs e)
         {
+            useCustomSort = true;
+            WriteConfigFile();
+
             int selectedIndex = textItemsDataGrid.SelectedIndex;
 
             if (selectedIndex > 0)
@@ -166,6 +220,9 @@ namespace TextCopier
 
         private void MoveDownButton_Click(object sender, RoutedEventArgs e)
         {
+            useCustomSort = true;
+            WriteConfigFile();
+
             int selectedIndex = textItemsDataGrid.SelectedIndex;
 
             if ((selectedIndex != -1) && (selectedIndex < textItemsDataGrid.Items.Count - 1))
@@ -178,8 +235,11 @@ namespace TextCopier
 
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
-            // Sort the items in the db
-            // Save the db
+            useCustomSort = false;
+            WriteConfigFile();
+
+            textItems.Clear();
+            ReadAllTextItemsOrderedByDescription();
             ClearTextBoxes();
         }
     }

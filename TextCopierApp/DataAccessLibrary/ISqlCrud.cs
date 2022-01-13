@@ -6,8 +6,9 @@ namespace DataAccessLibrary
     public interface ISqlCrud
     {
         void CreateTextItem(TextItemModel textItem);
-        void DeleteTextItem(int textItemId);
-        List<TextItemModel> ReadAllTextItems();
+        List<TextItemModel> ReadAllTextItemsOrderedBySortPosition();
+        List<TextItemModel> ReadAllTextItemsOrderedByDescription();
         void UpdateTextItem(TextItemModel textItem);
+        void DeleteTextItem(int textItemId);
     }
 }

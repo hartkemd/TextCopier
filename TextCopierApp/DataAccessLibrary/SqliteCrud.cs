@@ -14,13 +14,6 @@ namespace DataAccessLibrary
             _db = db;
         }
 
-        public List<TextItemModel> ReadAllTextItems()
-        {
-            string sql = "select Id, Description, Text, SortPosition from TextItems order by SortPosition;";
-
-            return _db.LoadData<TextItemModel, dynamic>(sql, new { }, _connectionString);
-        }
-
         public void CreateTextItem(TextItemModel textItem)
         {
             string sql = "insert into TextItems (Description, Text) values (@Description, @Text);";
@@ -28,6 +21,20 @@ namespace DataAccessLibrary
 
             sql = "update TextItems set SortPosition = (select count(*) from TextItems) where Id = @Id;";
             _db.SaveData(sql, new { textItem.Id }, _connectionString);
+        }
+
+        public List<TextItemModel> ReadAllTextItemsOrderedBySortPosition()
+        {
+            string sql = "select Id, Description, Text, SortPosition from TextItems order by SortPosition;";
+
+            return _db.LoadData<TextItemModel, dynamic>(sql, new { }, _connectionString);
+        }
+
+        public List<TextItemModel> ReadAllTextItemsOrderedByDescription()
+        {
+            string sql = "select Id, Description, Text, SortPosition from TextItems order by Description;";
+
+            return _db.LoadData<TextItemModel, dynamic>(sql, new { }, _connectionString);
         }
 
         public void UpdateTextItem(TextItemModel textItem)
