@@ -35,12 +35,11 @@ None yet.
 * Users can view a DataGrid of text to copy, with buttons to copy text to the clipboard.
 * Users can create, read, update, and delete items using text file data access. This uses CSV files, so text cannot currently contain commas.
 * Users can clear the selected item in the DataGrid and the text boxes.
+* Users can move items in the UI and database up and down (with buttons).
 * SQLite data access.
 
 ### To Do
-* Make sure SQLite data access is working properly.
-* Move items in the DataGrid up and down (with buttons). This feature broke, after we switched from text files to SQLite.
-* Sort the items in the DataGrid/database? from A to Z. This feature broke, after we switched from text files to SQLite.
+* Sort the items in the UI and database? from A to Z. This feature broke, after we switched from text files to SQLite.
 * (Longer Term): Integrate into a larger application, such as an IT Service Desk app, with features like:
     * A notepad that automatically saves what you type
     * An app that keeps a store of quick reference documentation, editable by some and read-only by others, in a multi-user environment
