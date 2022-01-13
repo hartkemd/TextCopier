@@ -1,9 +1,10 @@
 ﻿using DataAccessLibrary;
 using DataAccessLibrary.Models;
-using UIHelperLibrary;
+using TextCopierLibrary;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System;
 
 namespace TextCopier
 {
@@ -56,6 +57,30 @@ namespace TextCopier
         {
             textItemDescriptionTextBox.Clear();
             textItemTextTextBox.Clear();
+        }
+
+        private void MoveTextItemUpOrDownInDataGrid(int selectedIndex, int directionToMove)
+        {
+            TextItemModel selectedTextItem = (TextItemModel)textItemsDataGrid.SelectedItem;
+            int indexOfOtherItem;
+
+            if (directionToMove == -1 || directionToMove == 1)
+            {
+                indexOfOtherItem = selectedIndex + directionToMove;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(directionToMove));
+            }
+
+            TextItemModel otherTextItem = (TextItemModel)textItemsDataGrid.Items[indexOfOtherItem];
+
+            HelperMethods.SwapTextItemSortPositions(selectedTextItem, otherTextItem);
+
+            UpdateTextItem(selectedTextItem);
+            UpdateTextItem(otherTextItem);
+
+            textItems.Move(selectedIndex, indexOfOtherItem);
         }
 
         // UI events:
@@ -133,8 +158,7 @@ namespace TextCopier
 
             if (selectedIndex > 0)
             {
-                textItems.Move(selectedIndex, selectedIndex - 1);
-                //WriteAllTextItems();
+                MoveTextItemUpOrDownInDataGrid(selectedIndex, -1);
             }
 
             ClearTextBoxes();
@@ -146,8 +170,7 @@ namespace TextCopier
 
             if ((selectedIndex != -1) && (selectedIndex < textItemsDataGrid.Items.Count - 1))
             {
-                textItems.Move(selectedIndex, selectedIndex + 1);
-                //WriteAllTextItems();
+                MoveTextItemUpOrDownInDataGrid(selectedIndex, 1);
             }
 
             ClearTextBoxes();
@@ -155,8 +178,8 @@ namespace TextCopier
 
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
-            textItems.Sort();
-            //WriteAllTextItems();
+            // Sort the items in the db
+            // Save the db
             ClearTextBoxes();
         }
     }

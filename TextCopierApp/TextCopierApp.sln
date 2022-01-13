@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextCopier", "TextCopier\Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{984F07D1-F646-411D-8A52-7BDE018EC464}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIHelperLibrary", "UIHelperLibrary\UIHelperLibrary.csproj", "{548B0478-3B92-4FA7-A188-48004F902C40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextCopierLibrary", "TextCopierLibrary\TextCopierLibrary.csproj", "{04EB8433-AB36-4914-A445-B333F60D3108}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{984F07D1-F646-411D-8A52-7BDE018EC464}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{984F07D1-F646-411D-8A52-7BDE018EC464}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{984F07D1-F646-411D-8A52-7BDE018EC464}.Release|Any CPU.Build.0 = Release|Any CPU
-		{548B0478-3B92-4FA7-A188-48004F902C40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{548B0478-3B92-4FA7-A188-48004F902C40}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{548B0478-3B92-4FA7-A188-48004F902C40}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{548B0478-3B92-4FA7-A188-48004F902C40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04EB8433-AB36-4914-A445-B333F60D3108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04EB8433-AB36-4914-A445-B333F60D3108}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04EB8433-AB36-4914-A445-B333F60D3108}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04EB8433-AB36-4914-A445-B333F60D3108}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

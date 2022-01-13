@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
-    <ProjectReference Include="..\UIHelperLibrary\UIHelperLibrary.csproj" />
+    <ProjectReference Include="..\TextCopierLibrary\TextCopierLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
