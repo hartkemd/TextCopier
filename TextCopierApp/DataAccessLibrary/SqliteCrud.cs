@@ -1,5 +1,6 @@
 ﻿using DataAccessLibrary.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DataAccessLibrary
 {
@@ -16,11 +17,11 @@ namespace DataAccessLibrary
 
         public void CreateTextItem(TextItemModel textItem)
         {
-            string sql = "insert into TextItems (Description, Text) values (@Description, @Text);";
-            _db.SaveData(sql, new { textItem.Description, textItem.Text }, _connectionString);
-
-            sql = "update TextItems set SortPosition = (select count(*) from TextItems) where Id = @Id;";
-            _db.SaveData(sql, new { textItem.Id }, _connectionString);
+            string sql = "select count(1) from TextItems;";
+            int numberOfRows = _db.LoadData<int, dynamic>(sql, new { }, _connectionString).First();
+            
+            sql = "insert into TextItems (Description, Text, SortPosition) values (@Description, @Text, @NumberOfRows);";
+            _db.SaveData(sql, new { textItem.Description, textItem.Text, NumberOfRows = numberOfRows }, _connectionString);
         }
 
         public List<TextItemModel> ReadAllTextItemsOrderedBySortPosition()
@@ -32,7 +33,7 @@ namespace DataAccessLibrary
 
         public List<TextItemModel> ReadAllTextItemsOrderedByDescription()
         {
-            string sql = "select Id, Description, Text, SortPosition from TextItems order by Description;";
+            string sql = "select Id, Description, Text, SortPosition from TextItems order by Description COLLATE NOCASE;";
 
             return _db.LoadData<TextItemModel, dynamic>(sql, new { }, _connectionString);
         }
