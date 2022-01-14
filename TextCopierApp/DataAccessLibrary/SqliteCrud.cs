@@ -33,7 +33,7 @@ namespace DataAccessLibrary
 
         public List<TextItemModel> ReadAllTextItemsOrderedByDescription()
         {
-            string sql = "select Id, Description, Text, SortPosition from TextItems order by Description COLLATE NOCASE;";
+            string sql = "select Id, Description, Text, SortPosition from TextItems order by Description collate nocase;";
 
             return _db.LoadData<TextItemModel, dynamic>(sql, new { }, _connectionString);
         }
